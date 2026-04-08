@@ -1,0 +1,5 @@
+﻿.env
+*.pem
+*.key
+.gradio/
+__pycache__/

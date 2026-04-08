@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Imran Ali - AI Engineer</title>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+:root{
+  --neon:#3ddc84;--neon2:#00d4ff;--neon3:#ff6b35;
+  --bg:#030608;--card:rgba(13,20,30,0.9);
+}
+body{
+  background:var(--bg);
+  font-family:'Rajdhani',sans-serif;
+  color:#fff;
+  overflow-x:hidden;
+  cursor:none;
+}
+
+/* Custom cursor */
+#cursor{position:fixed;width:20px;height:20px;border:2px solid var(--neon);border-radius:50%;pointer-events:none;z-index:9999;transition:transform 0.1s;mix-blend-mode:difference;}
+#cursor-dot{position:fixed;width:6px;height:6px;background:var(--neon);border-radius:50%;pointer-events:none;z-index:9999;transform:translate(-50%,-50%);}
+
+/* Starfield */
+#stars{position:fixed;inset:0;z-index:0;overflow:hidden;}
+.star{position:absolute;border-radius:50%;animation:twinkle var(--d) ease-in-out infinite alternate;}
+@keyframes twinkle{0%{opacity:0.2;transform:scale(1);}100%{opacity:1;transform:scale(1.4);}}
+
+/* Floating particles */
+.particle{position:fixed;pointer-events:none;border-radius:50%;animation:float-up linear infinite;z-index:1;}
+@keyframes float-up{0%{transform:translateY(100vh) rotate(0deg);opacity:0;}10%{opacity:1;}90%{opacity:1;}100%{transform:translateY(-100px) rotate(720deg);opacity:0;}}
+
+/* Main container */
+.container{position:relative;z-index:2;max-width:1000px;margin:0 auto;padding:40px 20px 80px;}
+
+/* Hero section */
+.hero{text-align:center;padding:60px 0 40px;position:relative;}
+
+/* 3D Robot mascot */
+.robot-wrap{position:relative;width:220px;height:220px;margin:0 auto 30px;perspective:800px;}
+.robot{width:100%;height:100%;position:relative;transform-style:preserve-3d;animation:robot-idle 4s ease-in-out infinite;}
+@keyframes robot-idle{0%,100%{transform:rotateY(-15deg) rotateX(5deg) translateY(0);}25%{transform:rotateY(15deg) rotateX(-3deg) translateY(-10px);}50%{transform:rotateY(5deg) rotateX(8deg) translateY(-5px);}75%{transform:rotateY(-10deg) rotateX(-5deg) translateY(-12px);}
+}
+.robot svg{width:100%;height:100%;filter:drop-shadow(0 0 20px var(--neon)) drop-shadow(0 0 40px rgba(61,220,132,0.4));}
+
+/* Eye blink */
+@keyframes blink{0%,90%,100%{scaleY:1;}95%{scaleY:0.1;}}
+.eye-left,.eye-right{animation:blink 3s ease-in-out infinite;}
+.eye-right{animation-delay:0.1s;}
+
+/* Antenna pulse */
+@keyframes antenna-pulse{0%,100%{opacity:1;r:5;}50%{opacity:0.3;r:8;}}
+.antenna-light{animation:antenna-pulse 1s ease-in-out infinite;}
+
+/* Speech bubble */
+.speech{position:absolute;top:-20px;right:-30px;background:rgba(61,220,132,0.15);border:1px solid var(--neon);border-radius:16px 16px 16px 0;padding:10px 14px;font-size:12px;color:var(--neon);font-family:'Orbitron',monospace;white-space:nowrap;animation:bubble 6s ease-in-out infinite;}
+@keyframes bubble{0%,100%{opacity:0;transform:scale(0.8) translateY(5px);}10%,80%{opacity:1;transform:scale(1) translateY(0);}90%{opacity:0;}}
+.speech::after{content:'';position:absolute;bottom:-8px;left:12px;width:0;height:0;border-left:8px solid transparent;border-right:8px solid transparent;border-top:8px solid var(--neon);}
+
+/* Glitch title */
+.glitch-wrap{position:relative;margin-bottom:10px;}
+.glitch{font-family:'Orbitron',monospace;font-size:clamp(28px,5vw,52px);font-weight:900;color:#fff;position:relative;letter-spacing:0.05em;}
+.glitch::before,.glitch::after{content:attr(data-text);position:absolute;top:0;left:0;width:100%;height:100%;}
+.glitch::before{color:var(--neon2);animation:glitch1 3s infinite;clip-path:polygon(0 0,100% 0,100% 35%,0 35%);}
+.glitch::after{color:var(--neon3);animation:glitch2 3s infinite;clip-path:polygon(0 65%,100% 65%,100% 100%,0 100%);}
+@keyframes glitch1{0%,90%,100%{transform:translate(0);}91%{transform:translate(-3px,1px);}93%{transform:translate(3px,-1px);}95%{transform:translate(-2px,2px);}}
+@keyframes glitch2{0%,88%,100%{transform:translate(0);}89%{transform:translate(3px,1px);}91%{transform:translate(-3px,-1px);}93%{transform:translate(2px,-2px);}}
+
+.subtitle{font-size:16px;color:var(--neon);letter-spacing:0.2em;text-transform:uppercase;margin-bottom:8px;font-family:'Orbitron',monospace;}
+.tagline{color:rgba(255,255,255,0.5);font-size:15px;margin-bottom:30px;}
+
+/* Typing text */
+.typing-wrap{font-family:'Orbitron',monospace;font-size:14px;color:var(--neon2);margin-bottom:40px;height:24px;}
+.typing-cursor{display:inline-block;animation:blink-cursor 0.7s infinite;}
+@keyframes blink-cursor{0%,100%{opacity:1;}50%{opacity:0;}}
+
+/* Social buttons */
+.socials{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-bottom:50px;}
+.btn{display:inline-flex;align-items:center;gap:8px;padding:10px 20px;border-radius:8px;font-family:'Orbitron',monospace;font-size:11px;font-weight:700;text-decoration:none;letter-spacing:0.08em;border:1px solid;transition:all 0.3s;position:relative;overflow:hidden;}
+.btn::before{content:'';position:absolute;inset:0;opacity:0;transition:opacity 0.3s;}
+.btn:hover::before{opacity:1;}
+.btn:hover{transform:translateY(-3px);}
+.btn-green{color:var(--neon);border-color:var(--neon);background:rgba(61,220,132,0.05);}
+.btn-green::before{background:rgba(61,220,132,0.1);}
+.btn-blue{color:var(--neon2);border-color:var(--neon2);background:rgba(0,212,255,0.05);}
+.btn-blue::before{background:rgba(0,212,255,0.1);}
+.btn-orange{color:var(--neon3);border-color:var(--neon3);background:rgba(255,107,53,0.05);}
+.btn-orange::before{background:rgba(255,107,53,0.1);}
+
+/* Section */
+.section{margin-bottom:50px;}
+.section-title{font-family:'Orbitron',monospace;font-size:13px;color:var(--neon);letter-spacing:0.2em;text-transform:uppercase;margin-bottom:24px;display:flex;align-items:center;gap:12px;}
+.section-title::after{content:'';flex:1;height:1px;background:linear-gradient(90deg,rgba(61,220,132,0.4),transparent);}
+
+/* Code about card */
+.code-card{background:var(--card);border:1px solid rgba(61,220,132,0.2);border-radius:16px;overflow:hidden;backdrop-filter:blur(10px);}
+.code-header{background:rgba(0,0,0,0.4);padding:12px 16px;display:flex;align-items:center;gap:8px;border-bottom:1px solid rgba(255,255,255,0.05);}
+.dot{width:12px;height:12px;border-radius:50%;}
+.dot-r{background:#ff5f57;}
+.dot-y{background:#febc2e;}
+.dot-g{background:#28c840;}
+.code-filename{font-family:'Orbitron',monospace;font-size:11px;color:rgba(255,255,255,0.4);margin-left:8px;}
+.code-body{padding:24px;font-family:'Rajdhani',monospace;font-size:14px;line-height:2;}
+.kw{color:#ff79c6;}
+.cls{color:var(--neon2);}
+.fn{color:var(--neon);}
+.str{color:#f1fa8c;}
+.cm{color:rgba(255,255,255,0.3);font-style:italic;}
+.num{color:var(--neon3);}
+
+/* Skills grid */
+.skills-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:12px;}
+.skill-card{background:var(--card);border:1px solid rgba(255,255,255,0.08);border-radius:12px;padding:16px;text-align:center;transition:all 0.3s;position:relative;overflow:hidden;cursor:default;}
+.skill-card::before{content:'';position:absolute;inset:0;opacity:0;transition:opacity 0.3s;border-radius:12px;}
+.skill-card:hover{transform:translateY(-6px) scale(1.03);border-color:var(--neon);}
+.skill-card:hover::before{opacity:1;background:radial-gradient(circle at center,rgba(61,220,132,0.08),transparent);}
+.skill-icon{font-size:32px;margin-bottom:8px;display:block;animation:float-icon 3s ease-in-out infinite;}
+.skill-icon:nth-child(1){animation-delay:0s;}
+@keyframes float-icon{0%,100%{transform:translateY(0);}50%{transform:translateY(-6px);}}
+.skill-name{font-family:'Orbitron',monospace;font-size:10px;color:rgba(255,255,255,0.7);letter-spacing:0.1em;}
+
+/* Stats row */
+.stats-row{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;}
+.stat-card{background:var(--card);border-radius:14px;padding:24px;text-align:center;border:1px solid rgba(255,255,255,0.06);position:relative;overflow:hidden;}
+.stat-card::after{content:'';position:absolute;bottom:0;left:0;right:0;height:3px;}
+.stat-card:nth-child(1)::after{background:var(--neon);}
+.stat-card:nth-child(2)::after{background:var(--neon2);}
+.stat-card:nth-child(3)::after{background:var(--neon3);}
+.stat-num{font-family:'Orbitron',monospace;font-size:36px;font-weight:900;line-height:1;}
+.stat-card:nth-child(1) .stat-num{color:var(--neon);}
+.stat-card:nth-child(2) .stat-num{color:var(--neon2);}
+.stat-card:nth-child(3) .stat-num{color:var(--neon3);}
+.stat-label{font-size:12px;color:rgba(255,255,255,0.4);margin-top:6px;letter-spacing:0.1em;text-transform:uppercase;}
+
+/* Project card */
+.project-card{background:var(--card);border:1px solid rgba(255,255,255,0.08);border-radius:16px;padding:24px;transition:all 0.3s;position:relative;overflow:hidden;margin-bottom:14px;}
+.project-card::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--neon);border-radius:3px 0 0 3px;}
+.project-card:hover{border-color:rgba(61,220,132,0.3);transform:translateX(4px);}
+.proj-header{display:flex;align-items:center;gap:12px;margin-bottom:10px;}
+.proj-icon{width:40px;height:40px;border-radius:10px;background:rgba(61,220,132,0.1);border:1px solid rgba(61,220,132,0.2);display:flex;align-items:center;justify-content:center;font-size:20px;}
+.proj-name{font-family:'Orbitron',monospace;font-size:14px;font-weight:700;color:#fff;}
+.proj-desc{font-size:14px;color:rgba(255,255,255,0.5);line-height:1.6;margin-bottom:12px;}
+.proj-tags{display:flex;gap:8px;flex-wrap:wrap;}
+.tag{font-family:'Orbitron',monospace;font-size:9px;padding:4px 10px;border-radius:6px;letter-spacing:0.08em;}
+.tag-green{background:rgba(61,220,132,0.1);color:var(--neon);border:1px solid rgba(61,220,132,0.2);}
+.tag-blue{background:rgba(0,212,255,0.1);color:var(--neon2);border:1px solid rgba(0,212,255,0.2);}
+.tag-orange{background:rgba(255,107,53,0.1);color:var(--neon3);border:1px solid rgba(255,107,53,0.2);}
+
+/* Footer */
+.footer{text-align:center;padding:40px 0 0;border-top:1px solid rgba(255,255,255,0.05);}
+.footer-text{font-family:'Orbitron',monospace;font-size:11px;color:rgba(255,255,255,0.2);letter-spacing:0.15em;}
+
+/* Scanline effect */
+.scanlines{position:fixed;inset:0;pointer-events:none;z-index:100;background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,0,0,0.03) 2px,rgba(0,0,0,0.03) 4px);}
+
+/* Corner decorations */
+.corner{position:fixed;width:60px;height:60px;z-index:3;pointer-events:none;}
+.corner-tl{top:20px;left:20px;border-top:2px solid var(--neon);border-left:2px solid var(--neon);}
+.corner-tr{top:20px;right:20px;border-top:2px solid var(--neon);border-right:2px solid var(--neon);}
+.corner-bl{bottom:20px;left:20px;border-bottom:2px solid var(--neon);border-left:2px solid var(--neon);}
+.corner-br{bottom:20px;right:20px;border-bottom:2px solid var(--neon);border-right:2px solid var(--neon);}
+
+/* Mini robot floating */
+.mini-robot{position:fixed;z-index:5;pointer-events:none;animation:mini-float 8s ease-in-out infinite;}
+@keyframes mini-float{0%,100%{transform:translate(0,0) rotate(-5deg);}25%{transform:translate(20px,-30px) rotate(5deg);}50%{transform:translate(-10px,-50px) rotate(-3deg);}75%{transform:translate(15px,-20px) rotate(8deg);}}
+
+/* Goofy bounce */
+@keyframes goofy-bounce{0%,100%{transform:scaleY(1) translateY(0);}30%{transform:scaleY(0.8) translateY(10px);}60%{transform:scaleY(1.1) translateY(-20px);}80%{transform:scaleY(0.95) translateY(5px);}}
+</style>
+</head>
+<body>
+
+<div id="cursor"></div>
+<div id="cursor-dot"></div>
+<div class="scanlines"></div>
+<div class="corner corner-tl"></div>
+<div class="corner corner-tr"></div>
+<div class="corner corner-bl"></div>
+<div class="corner corner-br"></div>
+<div id="stars"></div>
+
+<!-- Mini floating robot -->
+<div class="mini-robot" style="bottom:120px;right:30px;">
+  <svg width="50" height="60" viewBox="0 0 50 60">
+    <rect x="12" y="18" width="26" height="22" rx="5" fill="#1a2a1a" stroke="#3ddc84" stroke-width="1.5"/>
+    <rect x="17" y="23" width="7" height="5" rx="2" fill="#3ddc84" opacity="0.9"/>
+    <rect x="26" y="23" width="7" height="5" rx="2" fill="#3ddc84" opacity="0.9"/>
+    <rect x="20" y="32" width="10" height="3" rx="1" fill="#3ddc84" opacity="0.5"/>
+    <rect x="8" y="22" width="6" height="10" rx="3" fill="#1a2a1a" stroke="#3ddc84" stroke-width="1"/>
+    <rect x="36" y="22" width="6" height="10" rx="3" fill="#1a2a1a" stroke="#3ddc84" stroke-width="1"/>
+    <rect x="17" y="40" width="6" height="14" rx="3" fill="#1a2a1a" stroke="#3ddc84" stroke-width="1"/>
+    <rect x="27" y="40" width="6" height="14" rx="3" fill="#1a2a1a" stroke="#3ddc84" stroke-width="1"/>
+    <rect x="18" y="10" width="14" height="10" rx="4" fill="#1a2a1a" stroke="#3ddc84" stroke-width="1.5"/>
+    <circle cx="25" cy="7" r="3" fill="#1a2a1a" stroke="#3ddc84" stroke-width="1"/>
+    <circle cx="25" cy="4" r="2" fill="#3ddc84" class="antenna-light"/>
+  </svg>
+</div>
+
+<div class="container">
+
+  <!-- HERO -->
+  <div class="hero">
+
+    <!-- 3D Robot -->
+    <div class="robot-wrap">
+      <div class="robot">
+        <div class="speech" id="speech-bubble">Hello World! 🤖</div>
+        <svg viewBox="0 0 200 220" xmlns="http://www.w3.org/2000/svg">
+          <!-- Antenna -->
+          <line x1="100" y1="10" x2="100" y2="28" stroke="#3ddc84" stroke-width="2.5" stroke-linecap="round"/>
+          <circle cx="100" cy="8" r="5" fill="#3ddc84" class="antenna-light"/>
+          <!-- Head -->
+          <rect x="50" y="28" width="100" height="80" rx="16" fill="#0d1f0d" stroke="#3ddc84" stroke-width="2"/>
+          <!-- Eyes -->
+          <rect x="65" y="48" width="28" height="20" rx="6" fill="#3ddc84" opacity="0.2"/>
+          <ellipse cx="79" cy="58" rx="10" ry="8" fill="#3ddc84" class="eye-left"/>
+          <ellipse cx="79" cy="58" rx="4" ry="5" fill="#001a00"/>
+          <circle cx="82" cy="55" r="2" fill="#fff" opacity="0.8"/>
+          <rect x="107" y="48" width="28" height="20" rx="6" fill="#3ddc84" opacity="0.2"/>
+          <ellipse cx="121" cy="58" rx="10" ry="8" fill="#3ddc84" class="eye-right"/>
+          <ellipse cx="121" cy="58" rx="4" ry="5" fill="#001a00"/>
+          <circle cx="124" cy="55" r="2" fill="#fff" opacity="0.8"/>
+          <!-- Mouth - goofy smile -->
+          <path d="M72 82 Q100 100 128 82" fill="none" stroke="#3ddc84" stroke-width="2.5" stroke-linecap="round"/>
+          <circle cx="78" cy="86" r="3" fill="#3ddc84" opacity="0.6"/>
+          <circle cx="122" cy="86" r="3" fill="#3ddc84" opacity="0.6"/>
+          <!-- Cheek blush -->
+          <ellipse cx="62" cy="75" rx="8" ry="5" fill="#ff6b35" opacity="0.3"/>
+          <ellipse cx="138" cy="75" rx="8" ry="5" fill="#ff6b35" opacity="0.3"/>
+          <!-- Body -->
+          <rect x="40" y="114" width="120" height="80" rx="14" fill="#0d1f0d" stroke="#3ddc84" stroke-width="2"/>
+          <!-- Chest panel -->
+          <rect x="58" y="126" width="84" height="54" rx="8" fill="rgba(61,220,132,0.05)" stroke="rgba(61,220,132,0.3)" stroke-width="1"/>
+          <!-- Chest lights -->
+          <circle cx="75" cy="140" r="6" fill="#3ddc84" opacity="0.8"/>
+          <circle cx="100" cy="140" r="6" fill="#00d4ff" opacity="0.8"/>
+          <circle cx="125" cy="140" r="6" fill="#ff6b35" opacity="0.8"/>
+          <!-- Chest bar -->
+          <rect x="68" y="155" width="64" height="6" rx="3" fill="rgba(61,220,132,0.2)" stroke="rgba(61,220,132,0.4)" stroke-width="1"/>
+          <rect x="68" y="155" width="40" height="6" rx="3" fill="#3ddc84" opacity="0.7"/>
+          <!-- Arms -->
+          <rect x="10" y="118" width="32" height="60" rx="10" fill="#0d1f0d" stroke="#3ddc84" stroke-width="2"/>
+          <circle cx="26" cy="182" r="10" fill="#0d1f0d" stroke="#3ddc84" stroke-width="2"/>
+          <rect x="158" y="118" width="32" height="60" rx="10" fill="#0d1f0d" stroke="#3ddc84" stroke-width="2"/>
+          <circle cx="174" cy="182" r="10" fill="#0d1f0d" stroke="#3ddc84" stroke-width="2"/>
+          <!-- Legs -->
+          <rect x="62" y="194" width="30" height="22" rx="8" fill="#0d1f0d" stroke="#3ddc84" stroke-width="2"/>
+          <rect x="108" y="194" width="30" height="22" rx="8" fill="#0d1f0d" stroke="#3ddc84" stroke-width="2"/>
+          <!-- Neck bolts -->
+          <circle cx="80" cy="112" r="4" fill="#3ddc84" opacity="0.5"/>
+          <circle cx="120" cy="112" r="4" fill="#3ddc84" opacity="0.5"/>
+        </svg>
+      </div>
+    </div>
+
+    <div class="glitch-wrap">
+      <h1 class="glitch" data-text="IMRAN ALI">IMRAN ALI</h1>
+    </div>
+    <div class="subtitle">AI Engineer & Automation Lead</div>
+    <div class="tagline">Building the future, one neural network at a time 🚀</div>
+
+    <div class="typing-wrap">
+      <span id="typed-text"></span><span class="typing-cursor">|</span>
+    </div>
+
+    <div class="socials">
+      <a href="https://github.com/emran-Automation-Techlead" class="btn btn-green">⬡ GitHub</a>
+      <a href="mailto:emranali.emran82@gmail.com" class="btn btn-blue">✉ Email</a>
+<<<<<<< HEAD
+      <a href="https://www.linkedin.com/imran-ali-mohammed" class="btn btn-orange">⚡ LinkedIn</a>
+=======
+      <a href="www.linkedin.com/imran-ali-mohammed" class="btn btn-orange">⚡ LinkedIn</a>
+>>>>>>> 65f87d8 (clean commit)
+    </div>
+  </div>
+
+  <!-- ABOUT -->
+  <div class="section">
+    <div class="section-title">About Me</div>
+    <div class="code-card">
+      <div class="code-header">
+        <div class="dot dot-r"></div>
+        <div class="dot dot-y"></div>
+        <div class="dot dot-g"></div>
+        <span class="code-filename">imran_ali.py</span>
+      </div>
+      <div class="code-body">
+        <span class="kw">class</span> <span class="cls">AIEngineer</span>:<br>
+        &nbsp;&nbsp;<span class="kw">def</span> <span class="fn">__init__</span>(self):<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;self.name &nbsp;&nbsp;&nbsp;&nbsp;= <span class="str">"Mohammed Imran Ali"</span><br>
+        &nbsp;&nbsp;&nbsp;&nbsp;self.role &nbsp;&nbsp;&nbsp;&nbsp;= <span class="str">"AI Engineer & Automation Tech Lead"</span><br>
+        &nbsp;&nbsp;&nbsp;&nbsp;self.location = <span class="str">"Hyderabad, India 🇮🇳"</span><br>
+        &nbsp;&nbsp;&nbsp;&nbsp;self.passion &nbsp;= [<span class="str">"Digital Twin AI"</span>, <span class="str">"LLMs"</span>, <span class="str">"Robotics"</span>]<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;self.coffee &nbsp;&nbsp;= <span class="num">float('inf')</span> &nbsp;<span class="cm"># ☕ unlimited</span><br>
+        <br>
+        &nbsp;&nbsp;<span class="kw">def</span> <span class="fn">say_hi</span>(self):<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;<span class="kw">print</span>(<span class="str">"Let's build something incredible! 🤖"</span>)
+      </div>
+    </div>
+  </div>
+
+  <!-- SKILLS -->
+  <div class="section">
+    <div class="section-title">Tech Arsenal</div>
+    <div class="skills-grid" id="skills-grid"></div>
+  </div>
+
+  <!-- STATS -->
+  <div class="section">
+    <div class="section-title">By The Numbers</div>
+    <div class="stats-row">
+      <div class="stat-card">
+        <div class="stat-num" id="stat1">0</div>
+        <div class="stat-label">AI Projects</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-num" id="stat2">0</div>
+        <div class="stat-label">Commits</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-num" id="stat3">0</div>
+        <div class="stat-label">Coffees ☕</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PROJECTS -->
+  <div class="section">
+    <div class="section-title">Featured Projects</div>
+    <div class="project-card">
+      <div class="proj-header">
+        <div class="proj-icon">🌐</div>
+        <div>
+          <div class="proj-name">Digital Twin AI</div>
+        </div>
+      </div>
+      <div class="proj-desc">AI-powered digital twin system for industrial automation. Real-time monitoring, predictive analytics, and LLM-powered natural language interface for querying asset health.</div>
+      <div class="proj-tags">
+        <span class="tag tag-green">Python</span>
+        <span class="tag tag-blue">LangChain</span>
+        <span class="tag tag-orange">IoT</span>
+        <span class="tag tag-green">OpenAI</span>
+        <span class="tag tag-blue">Digital Twin</span>
+      </div>
+    </div>
+    <div class="project-card" style="border-left-color:var(--neon2);">
+      <div class="proj-header">
+        <div class="proj-icon" style="background:rgba(0,212,255,0.1);border-color:rgba(0,212,255,0.3);">🤖</div>
+        <div>
+          <div class="proj-name">More Coming Soon...</div>
+        </div>
+      </div>
+      <div class="proj-desc">Currently building next-generation AI automation systems. Watch this space! 🚀</div>
+      <div class="proj-tags">
+        <span class="tag tag-blue">AI/ML</span>
+        <span class="tag tag-green">Automation</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="footer">
+    <div class="footer-text">⬡ BUILT WITH AI &nbsp;|&nbsp; EMRAN-AUTOMATION-TECHLEAD &nbsp;|&nbsp; 2026 ⬡</div>
+  </div>
+
+</div>
+
+<script>
+// Custom cursor
+const cursor = document.getElementById('cursor');
+const dot = document.getElementById('cursor-dot');
+document.addEventListener('mousemove', e => {
+  cursor.style.left = e.clientX - 10 + 'px';
+  cursor.style.top = e.clientY - 10 + 'px';
+  dot.style.left = e.clientX + 'px';
+  dot.style.top = e.clientY + 'px';
+});
+
+// Stars
+const starsEl = document.getElementById('stars');
+for(let i = 0; i < 150; i++){
+  const s = document.createElement('div');
+  s.className = 'star';
+  const size = Math.random() * 3 + 1;
+  s.style.cssText = `width:${size}px;height:${size}px;left:${Math.random()*100}%;top:${Math.random()*100}%;background:rgba(255,255,255,${Math.random()*0.8+0.2});--d:${Math.random()*4+2}s;animation-delay:${Math.random()*5}s`;
+  starsEl.appendChild(s);
+}
+
+// Particles
+const colors = ['#3ddc84','#00d4ff','#ff6b35'];
+for(let i = 0; i < 15; i++){
+  const p = document.createElement('div');
+  p.className = 'particle';
+  const size = Math.random() * 6 + 2;
+  p.style.cssText = `width:${size}px;height:${size}px;left:${Math.random()*100}%;background:${colors[Math.floor(Math.random()*3)]};opacity:0.6;animation-duration:${Math.random()*15+10}s;animation-delay:${Math.random()*10}s`;
+  document.body.appendChild(p);
+}
+
+// Speech bubbles
+const msgs = ['Hello World! 🤖','I love AI! 🧠','Digital Twin! 🌐','Let\'s code! 💻','Automation! ⚡','Python time! 🐍'];
+let msgIdx = 0;
+const bubble = document.getElementById('speech-bubble');
+setInterval(() => {
+  bubble.style.opacity = '0';
+  setTimeout(() => { bubble.textContent = msgs[msgIdx++ % msgs.length]; }, 500);
+}, 4000);
+
+// Typing animation
+const phrases = ['Building Digital Twin AI...','Automating the future...','Training neural networks...','Deploying to production...','Drinking coffee... ☕'];
+let pi = 0, ci = 0, deleting = false;
+const typed = document.getElementById('typed-text');
+function typeLoop(){
+  const phrase = phrases[pi % phrases.length];
+  if(!deleting){
+    typed.textContent = phrase.slice(0, ++ci);
+    if(ci === phrase.length){ deleting = true; setTimeout(typeLoop, 1800); return; }
+  } else {
+    typed.textContent = phrase.slice(0, --ci);
+    if(ci === 0){ deleting = false; pi++; setTimeout(typeLoop, 400); return; }
+  }
+  setTimeout(typeLoop, deleting ? 40 : 80);
+}
+typeLoop();
+
+// Skills
+const skills = [
+  {icon:'🐍',name:'Python'},{icon:'🤖',name:'LangChain'},{icon:'🧠',name:'OpenAI'},
+  {icon:'🔥',name:'PyTorch'},{icon:'📊',name:'Pandas'},{icon:'🐳',name:'Docker'},
+  {icon:'⚡',name:'FastAPI'},{icon:'🌐',name:'Digital Twin'},{icon:'📡',name:'IoT'},
+  {icon:'🔮',name:'TensorFlow'},{icon:'📈',name:'Plotly'},{icon:'🛠️',name:'Git'}
+];
+const grid = document.getElementById('skills-grid');
+skills.forEach((s,i) => {
+  const d = document.createElement('div');
+  d.className = 'skill-card';
+  d.innerHTML = `<span class="skill-icon" style="animation-delay:${i*0.2}s">${s.icon}</span><div class="skill-name">${s.name}</div>`;
+  grid.appendChild(d);
+});
+
+// Count-up stats
+function countUp(id, target, suffix=''){
+  const el = document.getElementById(id);
+  let cur = 0;
+  const step = Math.ceil(target / 60);
+  const t = setInterval(() => {
+    cur = Math.min(cur + step, target);
+    el.textContent = cur + suffix;
+    if(cur >= target) clearInterval(t);
+  }, 30);
+}
+setTimeout(() => {
+  countUp('stat1', 12);
+  countUp('stat2', 847);
+  countUp('stat3', 9999, '+');
+}, 800);
+</script>
+</body>
+</html>
